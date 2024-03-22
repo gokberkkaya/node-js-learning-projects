@@ -8,7 +8,12 @@ const pageController = require('./controllers/pageController');
 
 const app = express();
 
-mongoose.connect('mongodb://localhost/share-photo-db');
+mongoose.connect('mongodb+srv://kygokberk:ORytm90qcQ8oW8gq@cluster0.ohkdocp.mongodb.net/')
+    .then(() => {
+        console.log('Connected to Database!')
+    }).catch ((err) => {
+        console.log(err);
+    });
 
 // template engine
 app.set('view engine', 'ejs');
@@ -33,7 +38,7 @@ app.get('/about', pageController.getAboutPage);
 app.get('/add', pageController.getAddPage);
 app.get('/photos/edit/:id', pageController.getEditPage);
 
-const port = 3000;
+const port = process.env.PORT || 5000;
 app.listen(port, () => {
     console.log(`Connected to ${ port } port!`);
 });
