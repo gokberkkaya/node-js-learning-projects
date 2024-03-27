@@ -1,5 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const session = require('express-session');
+const MongoStore  = require('connect-mongo');
 const ejs = require('ejs');
 const pageRoute = require('./routes/pageRoute');
 const courseRoute = require('./routes/courseRoute');
@@ -14,12 +16,26 @@ mongoose.connect('mongodb://localhost/smart-education-db')
 // template engine
 app.set("view engine", "ejs");
 
+// global variables
+global.userIN = null;
+
 // middlewares
 app.use(express.static("public"));
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  store: MongoStore.create({ mongoUrl: 'mongodb://localhost/smart-education-db' }),
+}));
 
 // routes
+app.use('*', (req, res, next) => {
+    userIN = !!req.session.userID;
+
+    next();
+});
 app.use('/', pageRoute);
 app.use('/courses', courseRoute);
 app.use('/categories', categoryRoute);
