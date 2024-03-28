@@ -105,13 +105,70 @@
 									</div>
 									<div class="clearfix">
 										<ul style="list-style-type: none;">
-											<li style="float: left; margin-left: -40px;"><button class="btn btn-primary rounded-0 text-white"><span>UPDATE</span></button></li>
+											<li style="float: left; margin-left: -40px;"><button data-toggle="modal" data-target="#updateCourse<%= course._id %>" class="btn btn-primary rounded-0 text-white"><span>UPDATE</span></button></li>
 											<li style="float: right;"><a href="/courses/<%= course.slug %>?_method=DELETE" onclick="return confirm('Are you sure you want to delete?')" class="btn btn-danger rounded-0 text-white"><span>DELETE</span></a></li>
 										</ul>
 									</div>
 								</div>
 							</div>
 						</div><!-- end col -->
+
+						<!-- UPDATE Modal -->
+						<div class="modal fade" id="updateCourse<%= course._id %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+							<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+								<div class="modal-content">
+									<div class="modal-body customer-box">
+										<!-- Tab panes -->
+										<div class="tab-content">
+											<div class="tab-pane active" id="Login">
+												<form method="POST" action="/courses/<%= course.slug %>?_method=PUT" class="form-horizontal">
+													<div class="form-group">
+														<div class="col-sm-12">
+															<input type="text" name="name" class="form-control" placeholder="Course Name" value="<%= course.name %>" required>
+														</div>
+													</div>
+													<div class="form-group">
+														<div class="col-sm-12">
+															<input type="hidden" name="role" class="form-control" value="<%= user.role %>">
+														</div>
+													</div>
+													<div class="form-group">
+														<div class="col-sm-12">
+															<textarea rows="8" name="description" class="form-control pt-3"
+																placeholder="Course Description" required><%= course.description %></textarea>
+														</div>
+													</div>
+													<div class="form-group">
+														<div class="col-sm-12">
+															<select class="form-control" name="category">
+
+																<% categories.forEach((category) => { %>
+																	<option value="<%= category._id %>" <%= category._id == course.category.toString() ? 'selected' : '' %>>
+																		<%= category.name %>
+																	</option>
+																<% }) %>
+																
+															</select>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-sm-10">
+															<button type="submit" class="btn btn-light btn-radius btn-brd grd1">
+																Update
+															</button>
+															<button type="submit" class="btn btn-light btn-radius btn-brd grd1"
+																data-dismiss="modal" aria-hidden="true">
+																Cancel
+															</button>
+														</div>
+													</div>
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 
 					<% }); %>
 				</div><!-- end row -->
@@ -129,8 +186,7 @@
 								<form method="POST" action="/courses" class="form-horizontal">
 									<div class="form-group">
 										<div class="col-sm-12">
-											<input type="text" name="name" class="form-control"
-												placeholder="Course Name">
+											<input type="text" name="name" class="form-control" placeholder="Course Name" required>
 										</div>
 									</div>
 									<div class="form-group">
@@ -140,8 +196,7 @@
 									</div>
 									<div class="form-group">
 										<div class="col-sm-12">
-											<textarea rows="8" name="description" class="form-control pt-3"
-												placeholder="Course Description" required></textarea>
+											<textarea rows="8" name="description" class="form-control pt-3" placeholder="Course Description" required></textarea>
 										</div>
 									</div>
 									<div class="form-group">
