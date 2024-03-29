@@ -228,6 +228,160 @@
 				</div>
 			</div>
 		</div>
+	<% } else if (user.role === 'admin') { %>
+		<div class="all-title-box">
+			<div class="container text-center">
+				<h1><%= user.name %><span class="m_1">ADMIN</span </h1>
+			</div>
+		</div>
+
+		<div id="overviews" class="section wb">
+			<div class="container">
+				<% if (flashMessages) { %>
+					<% if (flashMessages.success) { %>
+						<div class="alert alert-success mt-3">
+							<%= flashMessages.success %>
+						</div>
+					<% } else if (flashMessages.error) { %>
+						<div class="alert alert-danger mt-3">
+							<%= flashMessages.error %>
+						</div>
+					<% } %>
+				<% } %>
+				<div class="row mt-3">
+					<h1>Users</h1>
+					<table class="table">
+						<thead>
+						  <tr>
+							<th scope="col">ID</th>
+							<th scope="col">Name</th>
+							<th scope="col">Email</th>
+							<th scope="col">Role</th>
+							<th scope="col">Delete</th>
+						  </tr>
+						</thead>
+						<tbody>
+
+							<% users.forEach((listedUser) => { %>
+								<tr>
+									<td><%= listedUser._id %></td>
+									<td><%= listedUser.name %></td>
+									<td><%= listedUser.email %></td>
+									<td><%= listedUser.role %></td>
+									<td>
+										<a href="/users/<%= listedUser._id %>?_method=DELETE" onclick="return confirm('Are you sure you want to delete this user?')" class="btn btn-danger rounded-0 text-white">
+											<span>DELETE</span>
+										</a>
+									</td>
+								  </tr>
+							<% }) %>
+						  
+						</tbody>
+					  </table>
+				</div><!-- end row -->
+				<div class="row mt-5">
+					<div class="d-flex w-100 justify-content-between">
+						<h1 class="align-self-end">Categories</h1>
+						<button class="btn btn-success rounded-0 text-white mb-2" href="#" data-toggle="modal"
+							data-target="#addCategory"><span>CREATE</span></button>
+					</div>
+					<table class="table">
+						<thead>
+						  <tr>
+							<th scope="col">ID</th>
+							<th scope="col">Name</th>
+							<th scope="col">Update</th>
+							<th scope="col">Delete</th>
+						  </tr>
+						</thead>
+						<tbody>
+
+							<% categories.forEach((listedCategory) => { %>
+								<tr>
+									<td><%= listedCategory._id %></td>
+									<td><%= listedCategory.name %></td>
+									<td>
+										<button class="btn btn-green btn-warning rounded-0 text-white" href="#" data-toggle="modal"
+											data-target="#updateCategory<%= listedCategory._id %>"><span>UPDATE</span></button>
+									</td>
+									<td>
+										<a href="/categories/<%= listedCategory._id %>?_method=DELETE" onclick="return confirm('Are you sure you want to delete this category?')" class="btn btn-danger rounded-0 text-white">
+											<span>DELETE</span>
+										</a>
+									</td>
+								</tr>
+								<!-- ADD Modal -->
+								<div class="modal fade" id="updateCategory<%= listedCategory._id %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+									<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+										<div class="modal-content">
+											<div class="modal-body customer-box">
+												<!-- Tab panes -->
+												<div class="tab-content">
+													<div class="tab-pane active" id="Login">
+														<form method="POST" action="/categories/<%= listedCategory._id %>?_method=PUT" class="form-horizontal">
+															<div class="form-group">
+																<div class="col-sm-12">
+																	<input type="text" name="name" class="form-control" value="<%= listedCategory.name %>" placeholder="Course Name" required>
+																</div>
+															</div>
+															<div class="row">
+																<div class="col-sm-10">
+																	<button type="submit" class="btn btn-light btn-radius btn-brd grd1">
+																		Update
+																	</button>
+																	<button type="submit" class="btn btn-light btn-radius btn-brd grd1"
+																		data-dismiss="modal" aria-hidden="true">
+																		Cancel
+																	</button>
+																</div>
+															</div>
+														</form>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+							<% }) %>
+						  
+						</tbody>
+					  </table>
+				</div><!-- end row -->
+			</div><!-- end container -->
+		</div><!-- end section -->
+		<!-- ADD Modal -->
+		<div class="modal fade" id="addCategory" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+			<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-body customer-box">
+						<!-- Tab panes -->
+						<div class="tab-content">
+							<div class="tab-pane active" id="Login">
+								<form method="POST" action="/categories" class="form-horizontal">
+									<div class="form-group">
+										<div class="col-sm-12">
+											<input type="text" name="name" class="form-control" placeholder="Course Name" required>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-10">
+											<button type="submit" class="btn btn-light btn-radius btn-brd grd1">
+												Create
+											</button>
+											<button type="submit" class="btn btn-light btn-radius btn-brd grd1"
+												data-dismiss="modal" aria-hidden="true">
+												Cancel
+											</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	<% } %>
 
 <%- include('partials/_footer') %>

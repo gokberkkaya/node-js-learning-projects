@@ -62,11 +62,37 @@ exports.getDashboardPage = async (req, res) => {
     const user = await User.findOne({_id: req.session.userID}).populate('courses');
     const categories = await Category.find();
     const courses = await Course.find({user: req.session.userID});
+    const users = await User.find();
 
     res.status(200).render('dashboard', {
         page_name: 'dashboard',
         user,
         categories,
-        courses
+        courses,
+        users
     });
+};
+
+exports.deleteUser = async (req, res) => {
+    try {
+        const currentUser = await User.findById(req.session.userID);
+
+        if (currentUser.role === 'admin') {
+            const user = await User.findByIdAndDelete(req.params.id);
+
+            await Course.deleteMany({user:req.params.id});
+
+            req.flash('success', `${ user.name } has been deleted successfully!`);
+
+            res.status(200).redirect('/users/dashboard');
+        } else {
+            req.flash('error', 'You are not authorized for this action!');
+
+            res.status(401).redirect('/users/dashboard');
+        }
+    } catch (error) {
+        req.flash('error', 'Sorry, something happened :(');
+
+        res.status(400).redirect('/users/dashboard');
+    }
 };
